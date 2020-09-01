@@ -1,0 +1,42 @@
+name: User Profile CI
+
+env:
+  registry: openhackggp0ljh0acr.azurecr.io
+  repository: devopsoh/api-userprofile
+  docker_path: apis/userprofile
+  staging_url: https://openhackggp0ljh0userprofile-staging.azurewebsites.net
+  prod_url: https://openhackggp0ljh0userprofile.azurewebsites.net
+  resource_group: openhackggp0ljh0rg
+  webapp_name: openhackggp0ljh0userprofile
+  build_name: UserProfile
+  webv_path: apis/userprofile/webvalidate
+
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - apis/userprofile/**  
+      - .github/workflows/userprofile.yml
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - apis/userprofile/**
+      - .github/workflows/userprofile.yml
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/userprofile    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm run test
