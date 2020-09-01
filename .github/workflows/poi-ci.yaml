@@ -1,0 +1,51 @@
+name: POI CI
+
+env:
+  poi_path: apis/poi/**
+  registry: openhackggp0ljh0acr.azurecr.io
+  repository: devopsoh/api-poi
+  docker_path: apis/poi/web
+  staging_url: https://openhackggp0ljh0poi-staging.azurewebsites.net
+  prod_url: https://openhackggp0ljh0poi.azurewebsites.net
+  resource_group: openhackggp0ljh0rg
+  webapp_name: openhackggp0ljh0poi
+  build_name: POI
+
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - apis/poi/**  
+      - .github/workflows/poi-ci.yml
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - apis/poi/**
+      - .github/workflows/poi-ci.yml
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.202'
+    - name: Add Code Coverage Tools
+      working-directory: apis/poi/tests/UnitTests
+      run: dotnet add package coverlet.msbuild
+
+    - name: Install dependencies
+      run: dotnet restore apis/poi/web/*.csproj
+      
+    - name: .NET Build Web
+      run: dotnet build --configuration Release --no-restore apis/poi/web/*.csproj
+
+    - name: .NET Build Unit Tests
+      run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
+
+    - name: .NET Test
+      run: dotnet test --no-restore --verbosity normal apis/poi/tests/UnitTests  /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+      
