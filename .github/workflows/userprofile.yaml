@@ -16,12 +16,12 @@ on:
     branches: [ master ]
     paths: 
       - apis/userprofile/**  
-      - .github/workflows/userprofile.yml
+      - .github/workflows/userprofile.yaml
   pull_request:
     branches: [ master ]
     paths: 
       - apis/userprofile/**
-      - .github/workflows/userprofile.yml
+      - .github/workflows/userprofile.yaml
 
 jobs:
   build_and_test:
