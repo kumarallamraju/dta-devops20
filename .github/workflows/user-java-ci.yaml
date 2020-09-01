@@ -1,0 +1,42 @@
+name: User Java CI
+
+env:
+  registry: openhackggp0ljh0acr.azurecr.io
+  repository: devopsoh/api-user-java
+  docker_path: apis/user-java
+  staging_url: https://openhackggp0ljh0userjava-staging.azurewebsites.net
+  prod_url: https://openhackggp0ljh0userjava.azurewebsites.net
+  resource_group: openhackggp0ljh0rg
+  webapp_name: openhackggp0ljh0userjava
+  build_name: User-JAVA
+  webv_path: apis/user-java/webvalidate
+
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - apis/user-java/**  
+      - .github/workflows/user-java-ci.yaml
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - apis/user-java/**
+      - .github/workflows/user-java-ci.yaml
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Run Unit Tests
+      run: mvn test
