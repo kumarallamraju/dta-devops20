@@ -1,5 +1,5 @@
 name: POI CI
-#
+
 env:
   poi_path: apis/poi/**
   registry: openhackggp0ljh0acr.azurecr.io
