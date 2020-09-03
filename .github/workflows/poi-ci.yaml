@@ -141,8 +141,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy_staging
     steps:
-    - name: CURL
-      id: poi-health-check
+    - name: healthcheck output
+      #id: poi-health-check
       uses: satak/webrequest-action@master
       with:
         url: https://openhackggp0ljh0poi-staging.azurewebsites.net/api/healthcheck/poi
@@ -154,7 +154,7 @@ jobs:
     - name: Check the health and Swap the Slots 
       shell: pwsh
       run: |
-        $output = '${{ steps.poi-health-check.outputs.output }}' | ConvertFrom-Json
+        $output = '${{ steps.healthcheck.outputs.output }}' | ConvertFrom-Json
         Write-Host " Status code is $($output.statusCode) "
         if($($output.statusCode) -eq 200) {
         Write-host "Healthy"
