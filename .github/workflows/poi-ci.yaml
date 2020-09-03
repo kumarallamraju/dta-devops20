@@ -89,6 +89,22 @@ jobs:
     - name: Docker Push
       run: docker push $registry/$repository:${{github.run_number}}  
 
+    - name: Azure Login
+      uses: Azure/login@v1.1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Deploy to Azure WebApp staging slot
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: openhackggp0ljh0poi
+        slot-name: staging
+        #images: openhackggp0ljh0acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }} 
+        images: $registry/$repository:${{ github.run_number }}   
+    - name: Azure Logout
+      run: az logout
+      
+      
+      
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
