@@ -76,11 +76,11 @@ jobs:
       uses: Azure/docker-login@v1     
       with:
         #ACR name
-        username: ${acr_username}
+        username: ${{ acr_username }}
         #ACR password
         password: ${{ secrets.ACR_KEY }}
         #ACR URL
-        login-server: ${registry}
+        login-server: ${{ registry }}
       #run: docker login $registry -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.GITHUB_TOKEN }}
 
     - name: Docker build
