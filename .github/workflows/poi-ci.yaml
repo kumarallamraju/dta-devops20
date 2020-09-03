@@ -142,7 +142,7 @@ jobs:
     needs: deploy_staging
     steps:
     - name: CURL
-      #id: poi-health-check
+      id: poi-health-check
       uses: satak/webrequest-action@master
       with:
         url: https://openhackggp0ljh0poi-staging.azurewebsites.net/api/healthcheck/poi
@@ -152,21 +152,17 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Check the health and Swap the Slots 
-      run: |
-        $R = Invoke-WebRequest -Method Get -URI 'https://openhackggp0ljh0poi-staging.azurewebsites.net/api/healthcheck/poi'
-        $timestamp = Get-Date
-        $output = ""
-       
-        $output = '{0} | {1} | {2}' -f($timestamp, $R.StatusCode, $Uri)
-        if($R.StatusCode -ne '200'){
-            exit 1
-        
-        } else {
-        $output = '{0} | {1}' -f($timestamp, $R.StatusCode)
-        }
-        Write-Output $output
-        Start-Sleep -Seconds 1
       shell: pwsh
+      run: |
+        $output = '${{ steps.poi-health-check.outputs.output }}' | ConvertFrom-Json
+        Write-Host " Status code is $($output.statusCode) "
+        if($($output.statusCode) -eq 200) {
+        Write-host "Healthy"
+        az webapp deployment slot swap --name openhackggp0ljh0poi --resource-group openhackggp0ljh0rg --slot staging --target-slot production
+        }
+        else {
+        Write-Error "POI API is not healthy"
+        }
  
     - name: Azure Logout
       run: az logout
