@@ -80,7 +80,7 @@ jobs:
         #ACR password
         password: ${{ secrets.ACR_KEY }}
         #ACR URL
-        login-server: ${{ secret.ACR_REGISTRY }}
+        login-server: ${{ secrets.ACR_REGISTRY }}
       #run: docker login $registry -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.GITHUB_TOKEN }}
 
     - name: Docker build
