@@ -76,11 +76,11 @@ jobs:
       uses: Azure/docker-login@v1     
       with:
         #ACR name
-        username: openhackggp0ljh0acr
+        username: ${acr_username}
         #ACR password
         password: ${{ secrets.ACR_KEY }}
         #ACR URL
-        login-server: openhackggp0ljh0acr.azurecr.io
+        login-server: ${registry}
       #run: docker login $registry -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.GITHUB_TOKEN }}
 
     - name: Docker build
@@ -92,7 +92,7 @@ jobs:
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.GITHUBTOKEN}}
         script: |
           let body = "${{ env.build_name }} Worflow Failure \n Build Number: ${{ github.run_number }} \n Build Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \n SHA: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) \n";
           github.issues.create({
