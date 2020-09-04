@@ -1,4 +1,4 @@
-name: POI CI
+name: POI CI/CD
 #
 env:
   poi_path: apis/poi/**
@@ -27,6 +27,8 @@ on:
       - '.github/workflows/poi-ci.yaml'
 
 jobs:
+  
+  ### The following code builds the .NET code, runs the .NET code and unit tests #####   
   build_and_test:
     runs-on: ubuntu-latest
     steps:
@@ -65,6 +67,7 @@ jobs:
             body: 'POI Build failed'
           });
 
+### The following code builds the docker image and pushes it to ACR #####
   docker_build_and_push:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
@@ -102,7 +105,7 @@ jobs:
             body: body
           });
 
-###Deploy to Staging Slot. 
+### The following code Deploys to Staging Slot. #####
   deploy_staging:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
@@ -135,7 +138,7 @@ jobs:
             body: body
           });
 
-### Validate the staging slot and swap it with production slot ####
+### The following code validates the staging slot (healthcheck) and swaps it with production slot ####
   validate_staging_and_swap_production:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
