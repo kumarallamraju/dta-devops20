@@ -217,9 +217,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: "Set Expected Validation Tag"
-      run: sed -i 's/<--tag-->/${{github.run_number}}/g' apis/poi/webvalidate/validate.json
-
     - name: POI Production Healthcheck
       id: poi-prod-health-check
       uses: satak/webrequest-action@master
