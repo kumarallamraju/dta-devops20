@@ -55,7 +55,7 @@ jobs:
       run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
 
     - name: .NET Test
-      run: dotnet test --no-restore --verbosity normal apis/poi/tests/UnitTests
+      run: dotnet test --no-restore --verbosity normal apis/poi/tests/UnitTests /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
       
     ### The following code snippet is for code coverage ####
     - name: Coveralls
