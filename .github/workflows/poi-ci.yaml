@@ -94,7 +94,7 @@ jobs:
         password: ${{ secrets.ACR_KEY }}
         #ACR URL
         login-server: ${{ secrets.ACR_REGISTRY }}
-      #run: docker login $registry -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.GITHUB_TOKEN }}
+      #run: docker login $registry -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.GITHUBTOKEN }}
 
     - name: Docker build
       run: docker build -t $registry/$repository:${{github.run_number}} --build-arg build_version=${{github.run_number}} $docker_path
@@ -208,7 +208,7 @@ jobs:
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.GITHUBTOKEN}}
         script: |
           let body = "${{ env.build_name }} Worflow Failure \n Build Number: ${{ github.run_number }} \n Build Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \n SHA: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) \n";
           github.issues.create({
@@ -249,7 +249,7 @@ jobs:
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.GITHUBTOKEN}}
         script: |
           let body = "${{ env.build_name }} Worflow Failure \n Build Number: ${{ github.run_number }} \n Build Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \n SHA: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) \n";
           github.issues.create({
@@ -276,7 +276,7 @@ jobs:
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.GITHUBTOKEN}}
         script: |
           let body = "${{ env.build_name }} Worflow Failure \n Build Number: ${{ github.run_number }} \n Build Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \n SHA: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) \n";
           github.issues.create({
